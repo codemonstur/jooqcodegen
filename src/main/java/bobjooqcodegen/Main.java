@@ -1,8 +1,8 @@
 package bobjooqcodegen;
 
-import bobthebuilder.pojos.buildfile.Project;
-import bobthebuilder.pojos.error.InvalidInput;
-import bobthebuilder.pojos.internal.DescriptionAndInterface;
+import bobthebuildtool.pojos.buildfile.Project;
+import bobthebuildtool.pojos.error.InvalidInput;
+import bobthebuildtool.pojos.internal.DescriptionAndInterface;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.*;
 
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static bobjooqcodegen.Functions.*;
-import static bobthebuilder.services.Functions.isNullOrEmpty;
+import static bobthebuildtool.services.Functions.isNullOrEmpty;
 import static java.nio.file.Files.isDirectory;
 import static java.nio.file.StandardOpenOption.*;
 import static java.util.Comparator.comparingInt;
@@ -40,6 +40,7 @@ public enum Main {;
 
             if (!arguments.dontPreProcess) preProcessSql(project1, arguments);
             GenerationTool.generate(newConfiguration(project1, arguments));
+            return 0;
         }));
     }
 

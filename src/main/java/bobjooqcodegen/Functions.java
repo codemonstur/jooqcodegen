@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static bobthebuilder.services.Log.logWarning;
+import static bobthebuildtool.services.Log.logWarning;
 
 public enum Functions {;
 
