@@ -1,11 +1,15 @@
 version: 0.1.0
 dependencies:
-  - project: ../bobthebuilder
+  - project: ../bobthebuildtool
     scope: provided
   - repository: org.jooq:jooq-codegen:3.12.1
   - repository: org.jooq:jooq-meta-extensions:3.12.1
   - repository: junit:junit:4.12
     scope: test
+
+build
+	  echo "[${PROJECT_NAME}] Building"
+    run-target -i build
 
 release-notes
   	echo "[${PROJECT_NAME}] Writing release notes to src/docs/releases/release-${PROJECT_VERSION}.txt"
