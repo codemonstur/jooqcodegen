@@ -1,4 +1,4 @@
-package bobjooqcodegen;
+package jooqcodegen;
 
 import bobthebuildtool.pojos.buildfile.Project;
 import bobthebuildtool.pojos.error.InvalidInput;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
-import static bobjooqcodegen.Functions.*;
+import static jooqcodegen.Functions.*;
 import static bobthebuildtool.services.Functions.isNullOrEmpty;
 import static java.nio.file.Files.isDirectory;
 import static java.nio.file.StandardOpenOption.CREATE;

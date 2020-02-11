@@ -1,4 +1,4 @@
-package bobjooqcodegen.parsers;
+package jooqcodegen.parsers;
 
 import java.util.regex.Pattern;
 

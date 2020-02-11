@@ -1,4 +1,4 @@
-package bobjooqcodegen.parsers;
+package jooqcodegen.parsers;
 
 public final class NameUTF8 implements StatementParser {
 

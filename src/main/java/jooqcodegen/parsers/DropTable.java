@@ -1,4 +1,4 @@
-package bobjooqcodegen.parsers;
+package jooqcodegen.parsers;
 
 public final class DropTable implements StatementParser {
     @Override

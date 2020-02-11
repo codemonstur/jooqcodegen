@@ -1,4 +1,4 @@
-package bobjooqcodegen;
+package jooqcodegen;
 
 import jcli.annotations.CliCommand;
 import jcli.annotations.CliOption;

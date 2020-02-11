@@ -1,6 +1,6 @@
-package bobjooqcodegen;
+package jooqcodegen;
 
-import bobjooqcodegen.parsers.*;
+import jooqcodegen.parsers.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;

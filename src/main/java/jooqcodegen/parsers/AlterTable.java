@@ -1,4 +1,4 @@
-package bobjooqcodegen.parsers;
+package jooqcodegen.parsers;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
