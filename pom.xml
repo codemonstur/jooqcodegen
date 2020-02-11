@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.codemonstur</groupId>
-    <artifactId>bobjooqcodegen</artifactId>
+    <artifactId>jooqcodegen</artifactId>
     <version>0</version>
 
     <properties>
@@ -16,7 +16,7 @@
 
         <dependency>
             <groupId>com.github.codemonstur</groupId>
-            <artifactId>bobthebuilder</artifactId>
+            <artifactId>bobthebuildtool</artifactId>
             <version>0.1.0</version>
             <scope>provided</scope>
         </dependency>

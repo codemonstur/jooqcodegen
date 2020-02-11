@@ -2,7 +2,6 @@ package bobjooqcodegen;
 
 import bobthebuildtool.pojos.buildfile.Project;
 import bobthebuildtool.pojos.error.InvalidInput;
-import bobthebuildtool.pojos.internal.DescriptionAndInterface;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.*;
 
@@ -12,12 +11,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 import static bobjooqcodegen.Functions.*;
 import static bobthebuildtool.services.Functions.isNullOrEmpty;
 import static java.nio.file.Files.isDirectory;
-import static java.nio.file.StandardOpenOption.*;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 import static jcli.CliParserBuilder.newCliParser;
@@ -25,23 +26,25 @@ import static jcli.CliParserBuilder.newCliParser;
 public enum Main {;
 
     public static void installPlugin(final Project project) {
-        project.commands.put("jooq-codegen", new DescriptionAndInterface<>("Generates JOOQ code", (project1, environment, args) -> {
-            final CodegenArguments arguments = newCliParser(CodegenArguments::new)
-                .onErrorPrintHelpAndExit()
-                .onHelpPrintHelpAndExit()
-                .parse(args);
+        project.addCommand("jooq-codegen", "Generates JOOQ code", Main::generateJooqCode);
+    }
 
-            if (project1.config.sourceDirectories.isEmpty()) {
-                project1.config.sourceDirectories.add(arguments.outputDir);
-                project1.config.sourceDirectories.add("src/main/java");
-            } else {
-                project1.config.sourceDirectories.add(0, arguments.outputDir);
-            }
+    private static int generateJooqCode(final Project project, final Map<String, String> env, final String[] args) throws Exception {
+        final CodegenArguments arguments = newCliParser(CodegenArguments::new)
+            .onErrorPrintHelpAndExit()
+            .onHelpPrintHelpAndExit()
+            .parse(args);
 
-            if (!arguments.dontPreProcess) preProcessSql(project1, arguments);
-            GenerationTool.generate(newConfiguration(project1, arguments));
-            return 0;
-        }));
+        if (project.config.sourceDirectories.isEmpty()) {
+            project.config.sourceDirectories.add(arguments.outputDir);
+            project.config.sourceDirectories.add("src/main/java");
+        } else {
+            project.config.sourceDirectories.add(0, arguments.outputDir);
+        }
+
+        if (!arguments.dontPreProcess) preProcessSql(project, arguments);
+        GenerationTool.generate(newConfiguration(project, arguments));
+        return 0;
     }
 
     private static void preProcessSql(final Project project, final CodegenArguments arguments) throws IOException, InvalidInput {
