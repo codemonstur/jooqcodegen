@@ -1,0 +1,3 @@
+0.3.0
+
+Renamed package to match the project name
