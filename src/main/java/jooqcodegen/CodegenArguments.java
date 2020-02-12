@@ -9,7 +9,7 @@ public class CodegenArguments {
 
     @CliOption(name = 'i', longName = "input-scripts", defaultValue = "src/main/resources/db/migration")
     public String inputScript;
-    @CliOption(name = 'o', longName = "output-dir", defaultValue = "target/generate-sources/jooq")
+    @CliOption(name = 'o', longName = "output-dir", defaultValue = "generate-sources/jooq")
     public String outputDir;
 
     @CliOption(longName = "wj")

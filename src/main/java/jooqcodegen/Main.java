@@ -6,22 +6,23 @@ import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
-import static jooqcodegen.Functions.*;
 import static bobthebuildtool.services.Functions.isNullOrEmpty;
+import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isDirectory;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 import static jcli.CliParserBuilder.newCliParser;
+import static jooqcodegen.Functions.toNumber;
 
 public enum Main {;
 
@@ -36,27 +37,59 @@ public enum Main {;
             .parse(args);
 
         if (project.config.sourceDirectories.isEmpty()) {
-            project.config.sourceDirectories.add(arguments.outputDir);
-            project.config.sourceDirectories.add("src/main/java");
+            project.config.sourceDirectories.add(toGeneratedSourceDir(project, arguments));
+            project.config.sourceDirectories.add("src" + File.separator + "main" + File.separator + "java");
         } else {
             project.config.sourceDirectories.add(0, arguments.outputDir);
         }
 
-        if (!arguments.dontPreProcess) preProcessSql(project, arguments);
-        GenerationTool.generate(newConfiguration(project, arguments));
+        String inputLocation = arguments.inputScript;
+        if (!arguments.dontPreProcess) {
+            final Path inputDir = toInputDir(project, arguments);
+            final Path outputFile = toOutputSchemaFile(project, arguments);
+            preProcessSql(inputDir, outputFile, arguments);
+            inputLocation = outputFile.toAbsolutePath().toString();
+        }
+
+        final String packageName = toPackageName(project, arguments);
+        final String outputDir = toOutputDir(project, arguments);
+        GenerationTool.generate(newConfiguration(packageName, inputLocation, outputDir, arguments));
         return 0;
     }
 
-    private static void preProcessSql(final Project project, final CodegenArguments arguments) throws IOException, InvalidInput {
-        final Path outputFile = checkValidOutputFile(project.getBuildTarget().resolve(arguments.generationSqlFile));
+    private static Path toInputDir(final Project project, final CodegenArguments arguments) throws FileNotFoundException {
+        if (isNullOrEmpty(arguments.inputScript)) throw new FileNotFoundException("Specified Migration SQL directory is empty");
+        final Path inputDir = project.parentDir.resolve(arguments.inputScript);
 
-        if (!isDirectory(Paths.get(arguments.inputScript)))
-            throw new InvalidInput("Migration input directory " + arguments.inputScript + " does not exist");
+        if (!exists(inputDir)) throw new FileNotFoundException("Specified Migration SQL directory does not exist");
+        if (!isDirectory(inputDir)) throw new FileNotFoundException("Specified Migration SQL directory is not a directory");
 
+        return inputDir;
+    }
+    private static Path toOutputSchemaFile(final Project project, final CodegenArguments arguments) throws IOException {
+        final Path outputFile = project.getBuildTarget().resolve(arguments.generationSqlFile);
+        if (exists(outputFile) && outputFile.toFile().delete())
+            throw new IOException("Generation SQL file exists and cannot be deleted");
+        if (!exists(outputFile.getParent()) && !outputFile.getParent().toFile().mkdirs())
+            throw new IOException("Could not create parent directories for generation SQL file");
+        return outputFile;
+    }
+    private static String toPackageName(final Project project, final CodegenArguments arguments) {
+        return isNullOrEmpty(arguments.packageName) ? project.config.name + ".schema" : arguments.packageName;
+    }
+    private static String toOutputDir(final Project project, final CodegenArguments arguments) {
+        return project.parentDir.relativize(project.getBuildTarget().resolve(arguments.outputDir)).toString();
+    }
+
+    private static String toGeneratedSourceDir(final Project project, final CodegenArguments arguments) {
+        return project.parentDir.relativize(project.getBuildTarget().resolve(arguments.outputDir)).toString();
+    }
+
+    private static void preProcessSql(final Path inputDir, final Path outputFile, final CodegenArguments arguments) throws IOException, InvalidInput {
         final String result = Arrays
-            .stream(listFiles(arguments.inputScript)
-                .filter(File::isFile)
-                .sorted(comparingInt(o -> toNumber(o.getName())))
+                .stream(Files.list(inputDir)
+                .filter(Files::isRegularFile)
+                .sorted(comparingInt(o -> toNumber(o.getFileName().toString())))
                 .flatMap(Functions::readAllLines)
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
@@ -73,16 +106,8 @@ public enum Main {;
         Files.writeString(outputFile, result, CREATE, TRUNCATE_EXISTING);
     }
 
-    private static Configuration newConfiguration(final Project project, final CodegenArguments arguments) {
-        final String packageName
-            = isNullOrEmpty(arguments.packageName)
-            ? project.config.name + ".schema"
-            : arguments.packageName;
-
-        final String inputScript
-            = !arguments.dontPreProcess
-            ? project.getBuildTarget().resolve(arguments.generationSqlFile).toAbsolutePath().toString()
-            : arguments.inputScript;
+    private static Configuration newConfiguration(final String packageName, final String inputLocation
+            , final String outputDir, final CodegenArguments arguments) {
 
         return new Configuration()
             .withLogging(arguments.logging)
@@ -103,10 +128,10 @@ public enum Main {;
                     .withName("org.jooq.meta.extensions.ddl.DDLDatabase")
                     .withProperties(new Property()
                         .withKey("scripts")
-                        .withValue(inputScript)))
+                        .withValue(inputLocation)))
                 .withTarget(new Target()
                     .withPackageName(packageName)
-                    .withDirectory(arguments.outputDir)));
+                    .withDirectory(outputDir)));
     }
 
 }
