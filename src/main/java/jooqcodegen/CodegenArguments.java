@@ -7,7 +7,9 @@ import org.jooq.meta.jaxb.Logging;
 @CliCommand(name = "jooqcodegen", description = "A bob plugin that generates JOOQ code")
 public class CodegenArguments {
 
-    @CliOption(name = 'i', longName = "input-scripts", defaultValue = "src/main/resources/db/migration")
+    public static final String DEFAULT_INPUT_LOCATION = "src/main/resources/db/migration";
+
+    @CliOption(name = 'i', longName = "input-scripts", defaultValue = DEFAULT_INPUT_LOCATION)
     public String inputScript;
     @CliOption(name = 'o', longName = "output-dir", defaultValue = "generate-sources/jooq")
     public String outputDir;

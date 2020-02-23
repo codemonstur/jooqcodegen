@@ -22,12 +22,13 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 import static jcli.CliParserBuilder.newCliParser;
+import static jooqcodegen.CodegenArguments.DEFAULT_INPUT_LOCATION;
 import static jooqcodegen.Functions.toNumber;
 
-public enum Main {;
+public enum BobPlugin {;
 
     public static void installPlugin(final Project project) {
-        project.addCommand("jooq-codegen", "Generates JOOQ code", Main::generateJooqCode);
+        project.addCommand("jooq-codegen", "Generates JOOQ code", BobPlugin::generateJooqCode);
     }
 
     private static int generateJooqCode(final Project project, final Map<String, String> env, final String[] args) throws Exception {
@@ -35,6 +36,8 @@ public enum Main {;
             .onErrorPrintHelpAndExit()
             .onHelpPrintHelpAndExit()
             .parse(args);
+
+        if (!isEnabled(project, arguments)) return 0;
 
         if (project.config.sourceDirectories.isEmpty()) {
             project.config.sourceDirectories.add(toGeneratedSourceDir(project, arguments));
@@ -55,6 +58,11 @@ public enum Main {;
         final String outputDir = toOutputDir(project, arguments);
         GenerationTool.generate(newConfiguration(packageName, inputLocation, outputDir, arguments));
         return 0;
+    }
+
+    private static boolean isEnabled(final Project project, final CodegenArguments arguments) {
+        if (!DEFAULT_INPUT_LOCATION.equals(arguments.inputScript)) return true;
+        return exists(project.parentDir.resolve(DEFAULT_INPUT_LOCATION));
     }
 
     private static Path toInputDir(final Project project, final CodegenArguments arguments) throws FileNotFoundException {
