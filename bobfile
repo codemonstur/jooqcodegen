@@ -1,4 +1,5 @@
 name: jooqcodegen
+enablePreview: false
 packaging: bob-plugin
 version: 0.4.2
 dependencies:
