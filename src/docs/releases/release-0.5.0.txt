@@ -1,0 +1,8 @@
+0.5.0
+
+Updated code with improvements from jooqpreprocessor
+- Bug fixes in SQL parsing
+- Some more clauses are removed
+Disabled preview features
+Updated to latest JOOQ version
+Fixed name of the project
