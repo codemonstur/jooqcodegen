@@ -55,7 +55,7 @@ public enum BobPlugin {;
         }
 
         final String packageName = toPackageName(project, arguments);
-        final String outputDir = toOutputDir(project, arguments);
+        final String outputDir = toGeneratedSourceDir(project, arguments);
         GenerationTool.generate(newConfiguration(packageName, inputLocation, outputDir, arguments));
         return 0;
     }
@@ -85,10 +85,6 @@ public enum BobPlugin {;
     private static String toPackageName(final Project project, final CodegenArguments arguments) {
         return isNullOrEmpty(arguments.packageName) ? project.config.name + ".schema" : arguments.packageName;
     }
-    private static String toOutputDir(final Project project, final CodegenArguments arguments) {
-        return project.parentDir.relativize(project.getBuildTarget().resolve(arguments.outputDir)).toString();
-    }
-
     private static String toGeneratedSourceDir(final Project project, final CodegenArguments arguments) {
         return project.parentDir.relativize(project.getBuildTarget().resolve(arguments.outputDir)).toString();
     }
