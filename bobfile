@@ -7,7 +7,7 @@ dependencies:
     scope: provided
   - repository: org.jooq:jooq-codegen:3.13.1
   - repository: org.jooq:jooq-meta-extensions:3.13.1
-  - repository: junit:junit:4.12
+  - repository: junit:junit:4.13.1
     scope: test
 
 build
