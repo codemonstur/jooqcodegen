@@ -1,4 +1,8 @@
 <project>
+    <!--
+        This is a dummy maven pom. It doesn't work for compiling. Instead Bob is used
+        for that. This file exists to make it easier to configure the project in IntelliJ.
+    -->
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.codemonstur</groupId>
@@ -17,7 +21,7 @@
         <dependency>
             <groupId>com.github.codemonstur</groupId>
             <artifactId>bobthebuildtool</artifactId>
-            <version>0.1.0</version>
+            <version>5</version>
             <scope>provided</scope>
         </dependency>
 
