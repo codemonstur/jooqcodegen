@@ -36,6 +36,8 @@ public class CodegenArguments {
     public boolean withKeys;
     @CliOption(longName = "wr")
     public boolean withRecords;
+    @CliOption(longName = "wif")
+    public boolean withInstanceFields;
 
     @CliOption(name = 'l', longName = "logging", defaultValue = "WARN")
     public Logging logging;

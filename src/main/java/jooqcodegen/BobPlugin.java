@@ -1,7 +1,6 @@
 package jooqcodegen;
 
 import bobthebuildtool.pojos.buildfile.Project;
-import bobthebuildtool.pojos.error.InvalidInput;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.*;
 
@@ -89,7 +88,7 @@ public enum BobPlugin {;
         return project.parentDir.relativize(project.getBuildTarget().resolve(arguments.outputDir)).toString();
     }
 
-    private static void preProcessSql(final Path inputDir, final Path outputFile, final CodegenArguments arguments) throws IOException, InvalidInput {
+    private static void preProcessSql(final Path inputDir, final Path outputFile, final CodegenArguments arguments) throws IOException {
         final String result = Arrays
                 .stream(Files.list(inputDir)
                 .filter(Files::isRegularFile)
@@ -102,8 +101,8 @@ public enum BobPlugin {;
                 .collect(joining())
                 .split(";"))
             .filter(Objects::nonNull)
-            .filter(s -> !s.trim().isEmpty())
             .map(String::trim)
+            .filter(trim -> !trim.isEmpty())
             .map(Functions::toJooqSafeStatement)
             .collect(joining());
 
@@ -127,6 +126,7 @@ public enum BobPlugin {;
                     .withPojos(arguments.withPojos)
                     .withIndexes(arguments.withIndexes)
                     .withKeys(arguments.withKeys)
+                    .withInstanceFields(arguments.withInstanceFields)
                     .withRecords(arguments.withRecords))
                 .withDatabase(new Database()
                     .withName("org.jooq.meta.extensions.ddl.DDLDatabase")
