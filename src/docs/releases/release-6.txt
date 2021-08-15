@@ -1,0 +1,4 @@
+6
+
+Updated dependencies to latest version
+Added withInstanceFields
