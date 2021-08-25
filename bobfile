@@ -6,7 +6,7 @@ version: 6
 dependencies:
   - project: ../bobthebuildtool
     scope: provided
-  - repository: org.jooq:jooq-codegen:3.15.1
-  - repository: org.jooq:jooq-meta-extensions:3.15.1
+  - repository: org.jooq:jooq-codegen:3.15.2
+  - repository: org.jooq:jooq-meta-extensions:3.15.2
   - repository: junit:junit:4.13.2
     scope: test
