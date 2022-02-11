@@ -1,0 +1,8 @@
+7
+
+Added withInstanceFields
+Bump junit from 4.12 to 4.13.1
+Disabled preview features
+Updated to latest JOOQ version
+Fixed name of the project
+Added requirement on bob7

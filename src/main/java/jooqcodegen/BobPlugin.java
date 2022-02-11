@@ -1,6 +1,7 @@
 package jooqcodegen;
 
 import bobthebuildtool.pojos.buildfile.Project;
+import bobthebuildtool.pojos.error.VersionTooOld;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.*;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static bobthebuildtool.services.Functions.isNullOrEmpty;
+import static bobthebuildtool.services.Update.requireBobVersion;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.isDirectory;
 import static java.nio.file.StandardOpenOption.CREATE;
@@ -26,7 +28,8 @@ import static jooqcodegen.Functions.toNumber;
 
 public enum BobPlugin {;
 
-    public static void installPlugin(final Project project) {
+    public static void installPlugin(final Project project) throws VersionTooOld {
+        requireBobVersion("7");
         project.addCommand("jooq-codegen", "Generates JOOQ code", BobPlugin::generateJooqCode);
     }
 
