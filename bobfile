@@ -1,4 +1,4 @@
-include https://raw.githubusercontent.com/codemonstur/bobfiles/master/foss-app-github
+include https://raw.githubusercontent.com/codemonstur/bobfiles/master/foss-lib-github
 
 enablePreview: false
 packaging: bob-plugin
