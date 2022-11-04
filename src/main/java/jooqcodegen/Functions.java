@@ -37,7 +37,7 @@ public enum Functions {;
     }
 
     private static final List<StatementParser> parsers = Arrays.asList(new ForeignKeyChecks()
-            , new NameUTF8(), new CreateTable(), new AlterTable(), new DropTable());
+            , new NameUTF8(), new CreateTable(), new AlterTable(), new DropTable(), new CreateIndex());
 
     public static String toJooqSafeStatement(final String statement) {
         for (final StatementParser parser : parsers) {
