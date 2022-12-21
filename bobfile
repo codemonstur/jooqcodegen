@@ -2,11 +2,11 @@ include https://raw.githubusercontent.com/codemonstur/bobfiles/master/foss-lib-g
 
 enablePreview: false
 packaging: bob-plugin
-version: 3.17.4
+version: 3.17.6
 dependencies:
   - project: ../bobthebuildtool
     scope: provided
-  - repository: org.jooq:jooq-codegen:3.17.4
-  - repository: org.jooq:jooq-meta-extensions:3.17.4
+  - repository: org.jooq:jooq-codegen:3.17.6
+  - repository: org.jooq:jooq-meta-extensions:3.17.6
   - repository: junit:junit:4.13.2
     scope: test

@@ -25,6 +25,7 @@ public final class CreateTable implements StatementParser {
             clause = clause.replaceAll(" USING BTREE", "");
             clause = clause.replaceAll(" DEFAULT NULL", "");
             clause = clause.replaceAll(" DEFAULT 0", "");
+            clause = clause.replaceAll(" DEFAULT \"[^\"]*\"", "");
             clause = clause.replaceAll(" DEFAULT b'0'", "");
             clause = clause.replaceAll(" DEFAULT b'1'", "");
             clause = clause.replaceAll(" COMMENT '[^']+'", "");

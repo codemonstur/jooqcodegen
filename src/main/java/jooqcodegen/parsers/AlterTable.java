@@ -44,6 +44,7 @@ public final class AlterTable implements StatementParser {
             // DEFAULT clauses are supported in ADD COLUMN but not in MODIFY COLUMN
             clause = clause.replaceAll(" DEFAULT NULL", "");
             clause = clause.replaceAll(" DEFAULT 0", "");
+            clause = clause.replaceAll(" DEFAULT \"[^\"]*\"", "");
             clause = clause.replaceAll(" DEFAULT b'0'", "");
             clause = clause.replaceAll(" DEFAULT b'1'", "");
             clause = clause.replaceAll(" COMMENT '[^']+'", "");
