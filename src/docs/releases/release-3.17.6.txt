@@ -1,0 +1,4 @@
+3.17.6
+
+Increased JOOQ version
+Added filter for default clause
